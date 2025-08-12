@@ -2,7 +2,17 @@ class Category:
     def __init__(self, name):
         self.name = name 
         self.ledger = []
-    
+        
+    def __str__(self):
+        title = self.name.center(30, "*")
+        lines = ""
+        for item in self.ledger:
+            desc = item["description"][:23].ljust(23)
+            amt = f"{item["amount"]:.2f}".rjust(7)
+            lines += f"{desc}{amt}\n"
+        total_line = f"Total: {self.get_balance():.2f}"
+        return f"{title}\n{lines}{total_line}"
+            
     def deposit(self, amount, description=""):
         self.ledger.append({"amount": amount, "description": description})
     
@@ -27,7 +37,15 @@ class Category:
         return False
     
     def check_funds(self, amount):
-        return amount <= self.get_balance
+        return amount <= self.get_balance()   
     
-def create_spend_chart(categories):
-    pass
+# def create_spend_chart(categories):
+#     pass
+
+food = Category('Food')
+food.deposit(1000, 'deposit')
+food.withdraw(10.15, 'groceries')
+food.withdraw(15.89, 'restaurant and more food for dessert')
+clothing = Category('Clothing')
+food.transfer(50, clothing)
+print(food)
