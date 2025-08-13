@@ -42,14 +42,25 @@ class Category:
 def create_spend_chart(categories):
     print("Percentage spent by category")
     total_spent = sum(-item["amount"] for cat in categories for item in cat.ledger if item["amount"] < 0)
-                
-    for i in range(100, -1, -10):
-        print(str(i).rjust(3) + "|")
-        
+    
     for cat in categories:
         spent = sum(-item["amount"] for item in cat.ledger if item["amount"] < 0)
         percentage = int(spent / total_spent * 100) // 10
-        print(" " * 4 + "-" * percentage)
+        # print(percentage)
+        
+    display = "" 
+    for i in range(100, -1, -10):
+        if percentage == i and percentage != 0:
+            display = (str(i).rjust(3) + "|" + "o")
+            # print(display)
+        else:
+            display = (str(i).rjust(3) + "|")
+            
+        print(display)
+        
+    print(" " * 4 + "-"  + "---"* len(categories))
+    
+    # for 
 
 food = Category('Food')
 food.deposit(1000, 'deposit')
@@ -58,5 +69,6 @@ food.withdraw(15.89, 'restaurant and more food for dessert')
 clothing = Category('Clothing')
 food.transfer(50, clothing)
 print(food)
+cars = Category("Cars")
 
-create_spend_chart([food, clothing])
+create_spend_chart([food, clothing, cars])
