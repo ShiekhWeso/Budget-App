@@ -59,11 +59,24 @@ def create_spend_chart(categories):
                 line += " o "
             else:
                 line += "   "
+        chart += line + " \n"
     
     # Step 4: Add horizontal line
+    chart += "    " + "-" * (len(categories) * 3 + 1) + "\n"
     
     # Step 5: Add category names vertically
-    
+    max_len = max(len(cat.name) for cat in categories)
+    for i in range(max_len):
+        line = "     "
+        for cat in categories:
+            if i < len(cat.name):
+                line += cat.name[i] + "  "
+            else:
+                line += "   "
+        chart += line + "\n"
+        
+    return chart.rstrip("\n")
+
 food = Category('Food')
 food.deposit(1000, 'deposit')
 food.withdraw(10.15, 'groceries')
@@ -73,4 +86,4 @@ food.transfer(50, clothing)
 print(food)
 cars = Category("Cars")
 
-create_spend_chart([food, clothing, cars])
+print(create_spend_chart([food, clothing, cars]))
