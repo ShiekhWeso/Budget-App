@@ -28,10 +28,9 @@ class Category:
             total += item["amount"]
         return total
     
-    
     def transfer(self, amount, category):
         if self.check_funds(amount):
-            self.withdraw(amount, f"Transfter to {category.name}")
+            self.withdraw(amount, f"Transfer to {category.name}")
             category.deposit(amount, f"Transfer from {self.name}")
             return True
         return False
@@ -40,28 +39,31 @@ class Category:
         return amount <= self.get_balance()   
     
 def create_spend_chart(categories):
-    print("Percentage spent by category")
-    total_spent = sum(-item["amount"] for cat in categories for item in cat.ledger if item["amount"] < 0)
-    
+    # Step 1: Calculate total spent
+    total_spent = 0
+    cat_spent = []
     for cat in categories:
         spent = sum(-item["amount"] for item in cat.ledger if item["amount"] < 0)
-        percentage = int(spent / total_spent * 100) // 10
-        # print(percentage)
+        cat_spent.append(spent)
+        total_spent += spent
         
-    display = "" 
-    for i in range(100, -1, -10):
-        if percentage == i and percentage != 0:
-            display = (str(i).rjust(3) + "|" + "o")
-            # print(display)
-        else:
-            display = (str(i).rjust(3) + "|")
-            
-        print(display)
-        
-    print(" " * 4 + "-"  + "---"* len(categories))
+    # Step 2: Calculate percentages
+    percentages = [int((spent / total_spent) * 10) * 10 for spent in cat_spent]
     
-    # for 
-
+    # Step 3: Create the chart lines
+    chart = "Percentage spent by category\n"
+    for i in range(100, -1, -10):
+        line = str(i).rjust(3) + "|"
+        for perc in percentages:
+            if perc >= i:
+                line += " o "
+            else:
+                line += "   "
+    
+    # Step 4: Add horizontal line
+    
+    # Step 5: Add category names vertically
+    
 food = Category('Food')
 food.deposit(1000, 'deposit')
 food.withdraw(10.15, 'groceries')
